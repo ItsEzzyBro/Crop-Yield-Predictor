@@ -10,6 +10,7 @@ A LightGBM-based regression model that predicts crop yield (tons per hectare) ba
 - [Project Structure](#project-structure)
 - [Training the Model](#training-the-model)
 - [Testing the Model](#testing-the-model)
+- [Running the Web Interface](#running-the-web-interface)
 
 ## 🎯 Project Overview
 
@@ -285,14 +286,166 @@ prediction = pipeline.predict(test_df)
 print(f"Predicted yield: {prediction[0]:.2f} tons per hectare")
 ```
 
+## 🌐 Running the Web Interface
+
+The web interface allows you to interactively test the model through a user-friendly form. You need to run it locally on your machine.
+
+![Web Interface Screenshot 1](web1.png)
+![Web Interface Screenshot 2](web2.png)
+![Web Interface Screenshot 3](web3.png)
+
 ### Web Interface (Optional Testing Tool)
 
 A web interface is provided in the `website/` directory for interactive testing. This is a demonstration/testing tool and not the main focus of this project.
 
-**To use the web interface:**
-1. Ensure `crop_yield_pipeline.pkl` is in the `website/` directory (download from Google Drive if needed)
+#### Requirements for Running the Website
 
-2. Access the deployed version: [Link will be provided when published]
+**System Requirements:**
+- Python 3.8 or higher
+- pip (Python package manager)
+- Web browser (Chrome, Firefox, Safari, Edge)
+- **macOS users:** Homebrew (for installing libomp)
+
+**Python Packages Required:**
+- Flask >= 3.0.0
+- Flask-CORS >= 4.0.0
+- pandas >= 2.2.0
+- numpy >= 1.26.0
+- scikit-learn == 1.6.1
+- joblib >= 1.3.0
+- lightgbm >= 4.6.0
+
+#### Step-by-Step Setup Instructions
+
+**Step 1: Install System Dependencies (macOS Only)**
+
+If you're on macOS, install Homebrew and libomp (required for LightGBM):
+
+```bash
+# Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install libomp
+brew install libomp
+```
+
+**Step 2: Install Python Dependencies**
+
+Navigate to the website directory and install required packages:
+
+```bash
+cd website
+pip3 install flask flask-cors pandas numpy scikit-learn==1.6.1 joblib lightgbm
+```
+
+Or create a `requirements.txt` file and install from it:
+
+```bash
+# Create requirements.txt with the packages listed above, then:
+pip3 install -r requirements.txt
+```
+
+**Step 3: Verify Model Pipeline File**
+
+Ensure the trained model pipeline is in the `website/` directory:
+
+```bash
+ls website/crop_yield_pipeline.pkl
+```
+
+If the file doesn't exist:
+- Download it from the [Google Drive folder](https://drive.google.com/drive/folders/1--ALCX6S1r0--bYt7pGUqIMDJ3Y1Dpc2?usp=drive_link)
+- Or train the model first (see [Training the Model](#training-the-model) section)
+
+**Step 4: Start the Backend Server**
+
+Open a terminal and start the Flask backend:
+
+```bash
+cd website
+
+# Set environment variables for libomp (macOS only)
+export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
+
+# Start Flask server
+python3 app.py
+```
+
+You should see:
+```
+✓ Pipeline loaded successfully!
+ * Running on http://127.0.0.1:5001
+```
+
+**Keep this terminal open** - the Flask server needs to keep running.
+
+**Step 5: Start the Frontend Server**
+
+Open a **new terminal** window and start the frontend:
+
+```bash
+cd website
+python3 -m http.server 8000
+```
+
+You should see:
+```
+Serving HTTP on :: port 8000
+```
+
+**Alternative:** Use VS Code's Live Server extension:
+1. Right-click on `website/index.html`
+2. Select "Open with Live Server"
+
+**Step 6: Access the Website**
+
+Open your web browser and navigate to:
+```
+http://localhost:8000
+```
+
+Fill out the form and click **"Predict Yield"** to get predictions!
+
+#### Running the Website - Quick Reference
+
+**Terminal 1 (Backend - Flask):**
+```bash
+cd website
+export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
+python3 app.py
+```
+
+**Terminal 2 (Frontend - Static Server):**
+```bash
+cd website
+python3 -m http.server 8000
+```
+
+**Browser:**
+- Go to: `http://localhost:8000`
+
+#### Troubleshooting Website Issues
+
+**Error: "Pipeline not loaded"**
+- Make sure `crop_yield_pipeline.pkl` is in the `website/` directory
+- Check that the pipeline file downloaded correctly (should be ~23MB)
+- Verify the Flask server started successfully (check terminal for "✓ Pipeline loaded successfully!")
+
+**Error: "Error connecting to prediction server"**
+- Make sure Flask backend is running on port 5001 (check Terminal 1)
+- Verify the backend is accessible: `curl http://localhost:5001/`
+- Check that port 5001 is not blocked by firewall
+
+**Error: "No module named 'flask'" or missing packages**
+- Install all required packages: `pip3 install flask flask-cors pandas numpy scikit-learn==1.6.1 joblib lightgbm`
+- Make sure you're using Python 3.8 or higher: `python3 --version`
+
+**Port already in use**
+- For port 5001: Kill existing process: `lsof -ti:5001 | xargs kill -9`
+- For port 8000: Kill existing process: `lsof -ti:8000 | xargs kill -9`
+- Or use different ports in the code
 
 ## 📝 Notes
 
@@ -334,6 +487,24 @@ Ensure you're using the same Python version (3.8+) and package versions as when 
 - Use Google Colab with more RAM
 - Reduce dataset size for testing: `crop_data = crop_data.head(100000)`
 - Adjust model parameters (reduce `n_estimators` or `num_leaves`)
+
+### Website: "Error connecting to prediction server"
+
+**Solution:**
+- Ensure Flask backend is running: Check Terminal 1 for Flask server
+- Verify backend is accessible: `curl http://localhost:5001/`
+- Check that both servers are running:
+  - Backend on port 5001 (Flask)
+  - Frontend on port 8000 (HTTP server)
+- Hard refresh browser: `Cmd + Shift + R` (Mac) or `Ctrl + Shift + R` (Windows)
+
+### Website: "Pipeline not loaded" error
+
+**Solution:**
+- Verify `crop_yield_pipeline.pkl` exists in `website/` directory
+- Check file size (should be ~23MB)
+- Download from Google Drive if missing
+- Ensure Flask server shows "✓ Pipeline loaded successfully!" when starting
 
 ## 📚 Technologies & Libraries
 
