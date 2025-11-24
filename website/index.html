@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Yield Predictor</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+</head>
+<body>
+    <!-- Background animation container for falling leaves -->
+    <div id="leavesBackground" class="leaves-background"></div>
+    <div class="container">
+        <header>
+            <h1>🌾 Crop Yield Predictor</h1>
+            <p class="subtitle">Input crop parameters to predict yield</p>
+        </header>
+
+        <form id="cropForm" class="form-container">
+            <div class="form-grid">
+                <!-- Region -->
+                <div class="form-group">
+                    <label for="region">Region *</label>
+                    <select id="region" name="region" required>
+                        <option value="">Select Region</option>
+                        <option value="East">East</option>
+                        <option value="North">North</option>
+                        <option value="South">South</option>
+                        <option value="West">West</option>
+                    </select>
+                </div>
+
+                <!-- Soil Type -->
+                <div class="form-group">
+                    <label for="soilType">Soil Type *</label>
+                    <select id="soilType" name="soilType" required>
+                        <option value="">Select Soil Type</option>
+                        <option value="Chalky">Chalky</option>
+                        <option value="Clay">Clay</option>
+                        <option value="Loam">Loam</option>
+                        <option value="Peaty">Peaty</option>
+                        <option value="Sandy">Sandy</option>
+                        <option value="Silt">Silt</option>
+                    </select>
+                </div>
+
+                <!-- Crop -->
+                <div class="form-group">
+                    <label for="crop">Crop *</label>
+                    <select id="crop" name="crop" required>
+                        <option value="">Select Crop</option>
+                        <option value="Barley">Barley</option>
+                        <option value="Cotton">Cotton</option>
+                        <option value="Maize">Maize</option>
+                        <option value="Rice">Rice</option>
+                        <option value="Soybean">Soybean</option>
+                        <option value="Wheat">Wheat</option>
+                    </select>
+                </div>
+
+                <!-- Rainfall -->
+                <div class="form-group">
+                    <label for="rainfall">Rainfall (mm) *</label>
+                    <input type="number" id="rainfall" name="rainfall" min="0" step="0.1" required>
+                </div>
+
+                <!-- Temperature -->
+                <div class="form-group">
+                    <label for="temperature">Temperature (°C) *</label>
+                    <input type="number" id="temperature" name="temperature" step="0.1" required>
+                </div>
+
+                <!-- Fertilizer Used -->
+                <div class="form-group">
+                    <label for="fertilizerUsed">Fertilizer Used *</label>
+                    <select id="fertilizerUsed" name="fertilizerUsed" required>
+                        <option value="">Select Option</option>
+                        <option value="True">True</option>
+                        <option value="False">False</option>
+                    </select>
+                </div>
+
+                <!-- Irrigation Used -->
+                <div class="form-group">
+                    <label for="irrigationUsed">Irrigation Used *</label>
+                    <select id="irrigationUsed" name="irrigationUsed" required>
+                        <option value="">Select Option</option>
+                        <option value="True">True</option>
+                        <option value="False">False</option>
+                    </select>
+                </div>
+
+                <!-- Weather Condition -->
+                <div class="form-group">
+                    <label for="weatherCondition">Weather Condition *</label>
+                    <select id="weatherCondition" name="weatherCondition" required>
+                        <option value="">Select Weather Condition</option>
+                        <option value="Cloudy">Cloudy</option>
+                        <option value="Rainy">Rainy</option>
+                        <option value="Sunny">Sunny</option>
+                    </select>
+                </div>
+
+                <!-- Days to Harvest -->
+                <div class="form-group">
+                    <label for="daysToHarvest">Days to Harvest *</label>
+                    <input type="number" id="daysToHarvest" name="daysToHarvest" min="1" required>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Predict Yield</button>
+        </form>
+
+        <div id="outputContainer" class="output-container" style="display: none;">
+            <h2>Input Map</h2>
+            <pre id="outputMap" class="output-map"></pre>
+            
+            <div id="predictionContainer" class="prediction-container" style="display: none;">
+                <h2>Prediction Result</h2>
+                <div class="prediction-box">
+                    <div class="prediction-label">Predicted Yield:</div>
+                    <div class="prediction-value" id="predictionValue">-</div>
+                    <div class="prediction-unit">tons per hectare</div>
+                </div>
+            </div>
+            
+            <div id="errorContainer" class="error-container" style="display: none;">
+                <div class="error-message" id="errorMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
