@@ -3,14 +3,15 @@ import os
 os.environ['LDFLAGS'] = '-L/opt/homebrew/opt/libomp/lib'
 os.environ['CPPFLAGS'] = '-I/opt/homebrew/opt/libomp/include'
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import joblib
 import pandas as pd
 import numpy as np
 import warnings
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)  # Enable CORS to allow frontend to communicate with backend
 
 # Suppress version warnings when loading the pipeline
@@ -125,9 +126,11 @@ def predict():
 
 @app.route('/')
 def index():
-    return "Crop Yield Predictor API is running!"
+    return send_from_directory('.', 'index.html')
 
 if __name__ == '__main__':
-    # Use port 5001 to avoid conflict with macOS AirPlay on port 5000
-    app.run(debug=True, port=5001, host='127.0.0.1')
+    # Use port from environment variable or default to 5001
+    # Port 5001 avoids conflict with macOS AirPlay on port 5000
+    port = int(os.environ.get('PORT', 5001))
+    app.run(debug=True, port=port, host='127.0.0.1')
 

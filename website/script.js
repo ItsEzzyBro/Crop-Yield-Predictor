@@ -98,8 +98,11 @@ document.getElementById('cropForm').addEventListener('submit', async function(e)
     submitBtn.disabled = true;
     
     try {
+        // Always use port 5001 for the Flask backend API
+        const apiUrl = `http://localhost:5001/predict`;
+        
         // Send data to backend for prediction
-        const response = await fetch('http://localhost:5001/predict', {
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -122,7 +125,7 @@ document.getElementById('cropForm').addEventListener('submit', async function(e)
         }
     } catch (error) {
         // Display error
-        document.getElementById('errorMessage').textContent = 'Error connecting to prediction server. Make sure the Flask server is running on port 5001.';
+        document.getElementById('errorMessage').textContent = `Error connecting to prediction server. Make sure the Flask server is running on port 5001.`;
         errorContainer.style.display = 'block';
         predictionContainer.style.display = 'none';
         console.error('Error:', error);

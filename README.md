@@ -294,6 +294,45 @@ The web interface allows you to interactively test the model through a user-frie
 ![Web Interface Screenshot 2](web2.png)
 ![Web Interface Screenshot 3](web3.png)
 
+### 🚀 Quick Start: Run the Web Application
+
+**The easiest way to run the web application is using the provided `run.sh` script:**
+
+```bash
+cd website
+./run.sh
+```
+
+Or if you prefer to make it executable first:
+
+```bash
+cd website
+chmod +x run.sh
+./run.sh
+```
+
+The script will:
+- ✅ Check for Python 3 and required dependencies
+- ✅ Verify the model pipeline file exists
+- ✅ Handle port conflicts automatically
+- ✅ Start the Flask server (which serves both frontend and backend)
+
+**After running `run.sh`, simply open your browser and navigate to:**
+
+```
+http://127.0.0.1:5001
+```
+
+or
+
+```
+http://localhost:5001
+```
+
+**That's it!** Flask serves both the frontend interface and the backend API on port 5001, so you don't need to run a separate HTTP server.
+
+---
+
 ### Web Interface (Optional Testing Tool)
 
 A web interface is provided in the `website/` directory for interactive testing. This is a demonstration/testing tool and not the main focus of this project.
@@ -357,9 +396,9 @@ If the file doesn't exist:
 - Download it from the [Google Drive folder](https://drive.google.com/drive/folders/1--ALCX6S1r0--bYt7pGUqIMDJ3Y1Dpc2?usp=drive_link)
 - Or train the model first (see [Training the Model](#training-the-model) section)
 
-**Step 4: Start the Backend Server**
+**Step 4: Start the Server**
 
-Open a terminal and start the Flask backend:
+Open a terminal and start the Flask server (which serves both frontend and backend):
 
 ```bash
 cd website
@@ -372,6 +411,12 @@ export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
 python3 app.py
 ```
 
+Or simply use the provided script:
+```bash
+cd website
+./run.sh
+```
+
 You should see:
 ```
 ✓ Pipeline loaded successfully!
@@ -380,36 +425,41 @@ You should see:
 
 **Keep this terminal open** - the Flask server needs to keep running.
 
-**Step 5: Start the Frontend Server**
-
-Open a **new terminal** window and start the frontend:
-
-```bash
-cd website
-python3 -m http.server 8000
-```
-
-You should see:
-```
-Serving HTTP on :: port 8000
-```
-
-**Alternative:** Use VS Code's Live Server extension:
-1. Right-click on `website/index.html`
-2. Select "Open with Live Server"
-
-**Step 6: Access the Website**
+**Step 5: Access the Website**
 
 Open your web browser and navigate to:
 ```
-http://localhost:8000
+http://127.0.0.1:5001
+```
+
+or
+
+```
+http://localhost:5001
 ```
 
 Fill out the form and click **"Predict Yield"** to get predictions!
 
+**Note:** Flask serves both the frontend interface and the backend API on port 5001, so you don't need to run a separate HTTP server.
+
 #### Running the Website - Quick Reference
 
-**Terminal 1 (Backend - Flask):**
+**🚀 Recommended Method - Single Server (Simplest):**
+
+**Terminal:**
+```bash
+cd website
+./run.sh
+```
+
+**Browser:**
+- Go to: `http://127.0.0.1:5001` or `http://localhost:5001`
+
+**That's it!** Flask serves both the frontend and backend on port 5001.
+
+**Alternative Method - Manual Setup:**
+
+**Terminal:**
 ```bash
 cd website
 export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
@@ -417,14 +467,8 @@ export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
 python3 app.py
 ```
 
-**Terminal 2 (Frontend - Static Server):**
-```bash
-cd website
-python3 -m http.server 8000
-```
-
 **Browser:**
-- Go to: `http://localhost:8000`
+- Go to: `http://127.0.0.1:5001` or `http://localhost:5001`
 
 #### Troubleshooting Website Issues
 
